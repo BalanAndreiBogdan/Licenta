@@ -1,0 +1,96 @@
+body{
+    margin: 0px;
+    font-family: sans-serif;
+    background-color:#fada5e;
+}
+
+nav{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: #b03636;
+    color: aliceblue;
+    min-height: 8vh;
+}
+
+.Logo{
+    height: 60px;
+    width: 120px;
+}
+
+.MainPage{
+    display: flex;
+    justify-content: space-between;
+    background-color: #fada5e;
+    padding-right: 12vh;
+    padding-left: 12vh;
+    margin-top: 70px;   
+}
+
+.Menu{
+    flex:1;
+    display: flex;
+    justify-content: center;
+    gap: 7vh;
+    flex-direction: column;
+}
+
+.TableImage{
+    flex:1;
+    display: flex;
+    justify-content: center;
+}
+
+.Title{
+    margin-top:0%;
+    font-size: 8vh;
+    font-family: 'Letter Sketch', sans-serif;
+    color: #2e5cb8;
+    flex:1;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+.Title h3{
+    margin:0%;
+}
+
+.Title h4{
+    margin:0%;
+}
+
+.Buttons{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    flex:3;
+}
+
+.ButtonStyle{
+    margin-bottom: 3vh;
+    width: 40vh;
+    height: 5vh;
+    font-family: sans-serif;
+    font-weight: bold;
+    border-radius: 20px;
+    border-width: thick;
+    border-color: #b03636;
+    color: #fada5e;
+    background-color: #b03636;
+    font-size: 16px;
+    transition-duration: 0.5s;
+}
+
+.ButtonStyle:hover {
+    border-color: #b03636;
+    color: #b03636;
+    background-color: #fada5e;
+    cursor: pointer;
+  }
+
+.Fundal{
+    width: auto;
+    height: 550px;
+}
