@@ -1,32 +1,25 @@
 import React from "react";
 import './App.css';
 import Nav from './Nav.js';
-import SinglePlayer from "./SinglePlayer.js";
-import OnMultiPlayer from "./OnMultiPlayer.js";
+import MainMenu from "./MainMenu.js";
 import LoMultiPlayer from "./LoMultiplayer.js";
-import fundal from "./fundal.png";
+import SinglePlayer from "./SinglePlayer.js";
+import OnMultiplayer from "./OnMultiplayer.js";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-      <Nav />
-      <div className="MainPage">
-        <div className="Menu">
-          <div className="Title">
-            <h3>Connect 4:</h3>
-            <h4>Conquest</h4>
-          </div>
-          <div className="Buttons">
-            <button className="ButtonStyle">Single-Player</button>
-            <button className="ButtonStyle">Local Multiplayer</button>
-            <button className="ButtonStyle">Online Multiplayer</button>
-          </div>
-        </div>
-        <div className="TableImage">
-          <img className="Fundal" src={fundal} alt="Fundal" />
-        </div>
+    <Router>
+      <div className="App">
+        <Nav />
+        <Routes>
+          <Route path = "/" exact element = {<MainMenu/>} />
+          <Route path = "/LoMultiPlayer" element = {<LoMultiPlayer/>} />
+          <Route path = "/SinglePlayer" element = {<SinglePlayer/>} />
+          <Route path = "/OnMultiplayer" element = {<OnMultiplayer/>} />
+        </Routes>
       </div>
-    </div>
+    </Router>
   );
 }
 

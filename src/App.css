@@ -14,8 +14,16 @@ nav{
 }
 
 .Logo{
-    height: 60px;
-    width: 120px;
+    height: 45px;
+    width: 45px;
+    transition-duration: 0.4s;
+    -webkit-filter: brightness(100%);
+            filter: brightness(100%);
+}
+
+.Logo:hover{
+    -webkit-filter: brightness(70%);
+            filter: brightness(70%);
 }
 
 .MainPage{
@@ -28,6 +36,7 @@ nav{
 }
 
 .Menu{
+    margin-top: 7vh;
     flex:1;
     display: flex;
     justify-content: center;
@@ -80,14 +89,18 @@ nav{
     color: #fada5e;
     background-color: #b03636;
     font-size: 16px;
-    transition-duration: 0.5s;
+    transition-duration: 0.4s;
+    -webkit-filter: brightness(100%);
+            filter: brightness(100%);
 }
 
-.ButtonStyle:hover {
-    border-color: #b03636;
+.ButtonStyle:hover{
+    /* border-color: #b03636;
     color: #b03636;
-    background-color: #fada5e;
+    background-color: #fada5e; */
     cursor: pointer;
+    -webkit-filter: brightness(70%);
+            filter: brightness(70%);
   }
 
 .Fundal{

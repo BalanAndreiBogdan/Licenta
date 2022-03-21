@@ -1,12 +1,12 @@
 import React from "react"
 import './App.css';
 
-function OnMultiPlayer() {
+function OnMultiplayer() {
   return (
     <div className="OnMultiplayer">
-     <h1>Buna ziua</h1>
+     <h1>Online Multiplayer</h1>
     </div>
   );
 }
 
-export default OnMultiPlayer;
+export default OnMultiplayer;
