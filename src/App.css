@@ -1,5 +1,17 @@
+html, body, #root {
+    width:100%;
+    height: 100%;
+    padding: 0px;
+    margin: 0px;
+}
+
+.App{
+    height: 90%;
+}
+
 body{
     margin: 0px;
+    padding: 0px;
     font-family: sans-serif;
     background-color:#fada5e;
 }
