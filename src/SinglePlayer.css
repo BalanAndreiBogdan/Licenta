@@ -5,6 +5,7 @@
     display: flex;
     border: 0px;
     padding: 6px;
+    cursor: pointer;
 
 }
 
@@ -12,6 +13,7 @@
     border-radius: 50%;
     background-color: #1E55A8;
     flex: 1;
+    display: flex;
 } 
 
 .column{
