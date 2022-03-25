@@ -51,14 +51,16 @@ function LoMultiPlayer(){
         let piece3 = getPiece(c + 1, r)
         let piece4 = getPiece(c, r + 1)
         if((piece && piece1 && piece2 && piece3 && piece4) 
-          && (piece1.color === piece2.color && piece2.color === piece3.color 
-          && piece3.color === piece4.color && piece.color != piece1.color)){
+          && (piece1.color === piece2.color 
+          && piece2.color === piece3.color 
+          && piece3.color === piece4.color 
+          && piece.color != piece1.color)){
             const nextPieceColor = piece.color === '#D90000' ? '#FFF000' : '#D90000'
             let newpiecesOnBoard = piecesOnBoard.map(element => {
               if(element.col == c && element.row == r)
-                return {col: c, row: r, color: nextPieceColor};
+                return {col: c, row: r, color: nextPieceColor}
               else
-                return element;
+                return element
             })
             setpiecesOnBoard(newpiecesOnBoard)
           }
@@ -72,8 +74,9 @@ function LoMultiPlayer(){
         let piece2 = getPiece(c+1, r)
         let piece3 = getPiece(c+2, r)
         let piece4 = getPiece(c+3, r)
-        if((piece1 && piece2 && piece3 && piece4) && 
-        (piece1.color === piece2.color && piece2.color === piece3.color 
+        if((piece1 && piece2 && piece3 && piece4) 
+          &&(piece1.color === piece2.color 
+          && piece2.color === piece3.color 
           && piece3.color === piece4.color)){
             const winner = piece1.color === '#D90000' ? 'Red' : 'Yellow'
             setWinner(winner)
@@ -89,7 +92,8 @@ function LoMultiPlayer(){
         let piece3 = getPiece(c, r + 2)
         let piece4 = getPiece(c, r + 3)
         if((piece1 && piece2 && piece3 && piece4) 
-        && (piece1.color === piece2.color && piece2.color === piece3.color 
+          && (piece1.color === piece2.color 
+          && piece2.color === piece3.color 
           && piece3.color === piece4.color)){
             const winner = piece1.color === '#D90000' ? 'Red' : 'Yellow'
             setWinner(winner)
@@ -104,13 +108,13 @@ function LoMultiPlayer(){
         let piece2 = getPiece(c + 1, r + 1)
         let piece3 = getPiece(c + 2, r + 2)
         let piece4 = getPiece(c + 3, r + 3)
-        if((piece1 && piece2 && piece3 && piece4) && 
-        (piece1.color === piece2.color && piece2.color === piece3.color 
+        if((piece1 && piece2 && piece3 && piece4) 
+          &&(piece1.color === piece2.color 
+          && piece2.color === piece3.color 
           && piece3.color === piece4.color)){
             const winner = piece1.color === '#D90000' ? 'Red' : 'Yellow'
             setWinner(winner)
           }
-          
       } 
   }
 
@@ -121,8 +125,9 @@ function LoMultiPlayer(){
         let piece2 = getPiece(c - 1, r + 1)
         let piece3 = getPiece(c - 2, r + 2)
         let piece4 = getPiece(c - 3, r + 3)
-        if((piece1 && piece2 && piece3 && piece4) && 
-        (piece1.color === piece2.color && piece2.color === piece3.color 
+        if((piece1 && piece2 && piece3 && piece4) 
+          &&(piece1.color === piece2.color 
+          && piece2.color === piece3.color 
           && piece3.color === piece4.color)){
             const winner = piece1.color === '#D90000' ? 'Red' : 'Yellow'
             setWinner(winner)
@@ -137,9 +142,9 @@ function LoMultiPlayer(){
       for (let c = 0; c < 7; c++){
         const piece = getPiece(c, r)
         columnCreations.push(
-          <div className = "square" onClick ={() => {addPiece(c)}}>
+          <div className = "square" onClick = {() => {addPiece(c)}}>
             <div className = "circle">
-              {piece ? <div className="coloredCircle" style={{backgroundColor: piece.color}}/> : null}
+              {piece ? <div className = "coloredCircle" style={{backgroundColor : piece.color}}/> : null}
             </div>
           </div>
         )
@@ -147,9 +152,9 @@ function LoMultiPlayer(){
       rowCreations.push(<div className = "column">{columnCreations}</div>)
     }
     return(
-      <div className="round-border">
-        <div className="board">
-          {winner ? <div className='winner' onClick = {restartGame}>{winner + ' wins!'}</div> : null}
+      <div className = "round-border">
+        <div className = "board">
+          {winner ? <div className = 'winner' onClick = {restartGame}>{winner + ' wins!'}</div> : null}
           {rowCreations}
         </div>
       </div>
@@ -157,20 +162,20 @@ function LoMultiPlayer(){
   }
 
   return (
-    <div className="BoardGame">
+    <div className = "BoardGame">
         {boardCreation()}
-        <div className="Buttons2">
+        <div className = "Buttons2">
           <div>
-            <button onClick={restartGame} className="ButtonsBoard">Restart</button>
+            <button onClick = {restartGame} className = "ButtonsBoard">Restart</button>
           </div>
           <Link to = "/">
             <div>
-              <button className="ButtonsBoard">Back</button>
+              <button className = "ButtonsBoard">Back</button>
             </div>
           </Link>
         </div>
     </div>
-  );
+  )
 }
 
 export default LoMultiPlayer;
