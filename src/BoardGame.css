@@ -1,0 +1,163 @@
+.square{
+    width: 60px;
+    height: 60px;
+    background-color: #1B62CC;
+    display: flex;
+    border: 0px;
+    padding: 6px;
+}
+
+.square:hover{
+    cursor: pointer;
+}
+
+.circle{
+    border-radius: 50%;
+    background-color: #1E55A8;
+    flex: 1;
+    display: flex;
+} 
+
+.column{
+    display: flex;
+    flex-direction: row;
+}  
+
+.coloredCircle{
+    flex: 1;
+    border-radius: 50%;
+}
+
+.board{
+    display: flex;
+    flex-direction: column;
+}
+
+.BoardGame{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 45px;
+}
+
+.round-border{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 472px;
+    width: 544px;
+    background-color: #1B62CC;
+    border-radius: 60px;
+    position: relative;
+}
+
+.winner{
+    position: absolute; 
+    left:0;
+    right:0;
+    top:0;
+    bottom: 0;
+    display: flex; 
+    justify-content: center;
+    align-items: center;
+    font-family: 'Letter Sketch', sans-serif;
+    font-size: 4VW; 
+    border-radius: 60px;
+    z-index: 1;
+    background-color: black; 
+    opacity: 0.5; 
+    color: white;
+}
+
+.winner:hover{
+    cursor: pointer;
+}
+
+.Buttons2{
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-around;
+}
+
+.ButtonsBoard{
+    margin-left: 13px;
+    margin-right: 13px;
+    width: 25vh;
+    height: 4vh;
+    font-family: sans-serif;
+    font-weight: bold;
+    border-radius: 20px;
+    border-width: thick;
+    border-color: #b03636;
+    color: #fada5e;
+    background-color: #b03636;
+    font-size: 13px;
+    transition-duration: 0.4s;
+    -webkit-filter: brightness(100%);
+            filter: brightness(100%);
+}
+
+.ButtonsBoard:hover{
+    cursor: pointer;
+    -webkit-filter: brightness(70%);
+            filter: brightness(70%);
+}
+
+@media screen and (max-width: 600px) {
+    .square{
+        width: 40px;
+        height: 40px;
+    }
+
+    .round-border{
+        height: 347px;
+        width: 399px;
+    }
+
+    .BoardGame{
+        margin-top: 70px;
+    }
+}
+
+@media screen and (max-height: 700px) {
+    .square{
+        width: 40px;
+        height: 40px;
+    }
+
+    .round-border{
+        height: 347px;
+        width: 399px;
+    }
+
+    .BoardGame{
+        margin-top: 70px;
+    }
+}
+
+@media screen and (max-width: 468px) {
+    .square{
+        width: 25px;
+        height: 25px;
+    }
+
+    .round-border{
+        height: 262px;
+        width: 299px;
+    }
+
+    .BoardGame{
+        margin-top: 100px;
+    }
+
+    .ButtonsBoard{
+        margin-left: 6px;
+        margin-right: 6px;
+        width: 15vh;
+        height: 4vh;
+        font-size: 9px;
+    }
+}
+
+

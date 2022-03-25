@@ -1,7 +1,7 @@
 import React from "react"
 import {useState, useEffect} from "react"
 import './App.css';
-import './SinglePlayer.css';
+import './BoardGame.css';
 
 function SinglePlayer() {
 
@@ -150,7 +150,7 @@ function SinglePlayer() {
   }
 
   return (
-    <div className="SinglePlayer">
+    <div className="BoardGame">
       <div>
         {BoardCreation()}
       </div>

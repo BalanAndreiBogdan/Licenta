@@ -1,31 +1,31 @@
-import React from "react";
+import React from 'react';
 import './App.css';
-import fundal from "./fundal.png";
+import fundal from './fundal.png';
 import {Link} from 'react-router-dom';
 
 const MainMenu = () => {
   return (
-    <div className="MainMenu">
-      <div className="MainPage">
-        <div className="Menu">
-          <div className="Title">
+    <div className = "MainMenu">
+      <div className = "MainPage">
+        <div className = "Menu">
+          <div className = "Title">
             <h3>Connect 4:</h3>
             <h4>Conquest</h4>
           </div>
-          <div className="Buttons">
+          <div className = "Buttons">
             <Link to = "/SinglePlayer">
-                <button className="ButtonStyle">Single-Player</button>
+                <button className = "ButtonStyle">Single-Player</button>
             </Link>
             <Link to = "/LoMultiplayer">
-            <button className="ButtonStyle">Local Multiplayer</button>
+            <button className = "ButtonStyle">Local Multiplayer</button>
             </Link>
             <Link to = "/OnMultiplayer">
-            <button className="ButtonStyle">Online Multiplayer</button>
+            <button className = "ButtonStyle">Online Multiplayer</button>
             </Link>
           </div>
         </div>
-        <div className="TableImage">
-          <img className="Fundal" src={fundal} alt="Fundal" />
+        <div className = "TableImage">
+          <img className = "Fundal" src = {fundal} alt = "Fundal" />
         </div>
       </div>
     </div>
