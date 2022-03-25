@@ -7,7 +7,32 @@ function SinglePlayer() {
 
   const [moves, setMoves] = useState([])
   const [playerTurn, setplayerTurn] = useState('#D90000')
-  const [winner, setWinner] = useState("popica")
+  const [winner, setWinner] = useState()
+
+  const conquer = () => {
+    for(let c = 1; c < 6; c++)
+      for(let r = 1; r < 5; r++){
+        let piece = getPiece(c, r)
+        let piece1 = getPiece(c, r - 1)
+        let piece2 = getPiece(c - 1, r)
+        let piece3 = getPiece(c + 1, r)
+        let piece4 = getPiece(c, r + 1)
+        if((piece && piece1 && piece2 && piece3 && piece4) && 
+        (piece1.player === piece2.player && piece2.player === piece3.player && piece3.player === piece4.player && piece.player != piece1.player))
+          {
+            const nextPlayerTurn = piece.player === '#D90000' ? '#FFF000' : '#D90000'
+            let newMoves = moves.map(element => {
+              if (element.x == c && element.y == r){
+                return {x: c, y: r, player: nextPlayerTurn};
+              }
+              else{
+                return element;
+              }
+            })
+            setMoves(newMoves)
+          }
+      } 
+  }
 
   const checkForOrizWin = () => {
     for(let c = 0; c < 4; c++)
@@ -33,13 +58,42 @@ function SinglePlayer() {
       } 
   }
 
+  const checkForDiag1Win = () => {
+    for(let c = 0; c < 4; c++)
+      for(let r = 0; r < 3; r++){
+        let piece1 = getPiece(c, r)
+        let piece2 = getPiece(c + 1, r + 1)
+        let piece3 = getPiece(c + 2, r + 2)
+        let piece4 = getPiece(c + 3, r + 3)
+        if((piece1 && piece2 && piece3 && piece4) && (piece1.player === piece2.player && piece2.player === piece3.player && piece3.player === piece4.player))
+          setWinner(piece1.player + ' wins')
+      } 
+  }
+
+  const checkForDiag2Win = () => {
+    for(let c = 3; c < 7; c++)
+      for(let r = 0; r < 3; r++){
+        let piece1 = getPiece(c, r)
+        let piece2 = getPiece(c - 1, r + 1)
+        let piece3 = getPiece(c - 2, r + 2)
+        let piece4 = getPiece(c - 3, r + 3)
+        if((piece1 && piece2 && piece3 && piece4) && (piece1.player === piece2.player && piece2.player === piece3.player && piece3.player === piece4.player))
+          setWinner(piece1.player + ' wins')
+      } 
+  }
+
   useEffect(() => {
+    conquer()
     checkForOrizWin()
     checkForVertWin()
-  },[moves]);
+    checkForDiag1Win()
+    checkForDiag2Win()
+  }, [moves]);
 
   const resetBoard = () =>{
     setMoves([])
+    setWinner()
+    setplayerTurn('#D90000')
   }
 
   const getPiece = (x, y) => {
@@ -51,9 +105,16 @@ function SinglePlayer() {
 
   const AddMove = (x, y) => {
     const nextPlayerTurn = playerTurn === '#D90000' ? '#FFF000' : '#D90000'
-    setMoves(moves.concat({x, y, player:playerTurn}))
-    console.log(moves)
-    setplayerTurn(nextPlayerTurn)
+    let availableYPosition = null
+    for( let position = 5; position >= 0; position--){
+      if(!getPiece(x,position)){
+        availableYPosition = position
+        break;
+      }
+    }
+    if(availableYPosition!==null)
+    {setMoves(moves.concat({x, y:availableYPosition, player:playerTurn}))
+    setplayerTurn(nextPlayerTurn)}
   }
 
   const BoardCreation = () =>{
@@ -78,7 +139,10 @@ function SinglePlayer() {
     return(
       <div className="round-border">
         <div className="board">
-          {winner && <div onClick={resetBoard}>{winner}</div>}
+          {winner && <div onClick={resetBoard} style={{position:'absolute', left:0, 
+          right:0, bottom:0, top:0, zIndex:3, backgroundColor: 'black', opacity: '0.5', 
+          display: 'flex', justifyContent:'center', alignItems: 'center', color: 'white', 
+          fontWeight: '200', fontSize: '8VW', borderRadius: '60px'}}>{winner}</div>}
           {rowViews}
         </div>
       </div>
