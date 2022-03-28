@@ -1,14 +1,29 @@
 import React from 'react'
-import {useState, useEffect} from 'react'
+import {useState, useEffect, useRef} from 'react'
 import './BoardGame.css'
 import './App.css'
 import {Link} from 'react-router-dom'
 
-function LoMultiPlayer(){
+function SinglePlayerNo(){
   const [piecesOnBoard, setpiecesOnBoard] = useState([])
-  const [pieceColor, setpieceColor] = useState('#D90000')
+  const [pieceColor, setpieceColor] = useState(0)
   const [winner, setWinner] = useState()
-  const [draw, setDraw] = useState(null)
+
+  const ref = useRef(null);
+  
+  const myfunct = () => {
+    console.log('activated')
+        let row = null
+        let col = 0
+        for(let r = 5; r >= 0; r--)
+            if(getPiece(col, r) == null ){
+                row = r
+                break
+            }
+        if(row !== null && winner == null){
+        setpiecesOnBoard(piecesOnBoard.concat({col, row : row, color : '#FFF000'}))
+        }
+  }
 
   useEffect(() => {
     conquerPiece()
@@ -16,20 +31,25 @@ function LoMultiPlayer(){
     checkForVertWin()
     checkForDiag1Win()
     checkForDiag2Win()
-    checkForDraw()
   }, [piecesOnBoard])
+
+  useEffect(() => {
+    if (pieceColor){
+        setTimeout(() => {
+            ref.current.click();
+        }, 5000);
+    }
+    }, [pieceColor]);
 
   const restartGame = () =>{
     setpiecesOnBoard([])
     setWinner()
-    setpieceColor('#D90000')
-    setDraw(null)
+    // setpieceColor('#D90000')
   }
 
   const getPiece = (col, row) => {
     for(let element = 0; element < piecesOnBoard.length; element++)
-      if(piecesOnBoard[element].col === col 
-        && piecesOnBoard[element].row === row)
+      if(piecesOnBoard[element].col === col && piecesOnBoard[element].row === row)
         return (piecesOnBoard[element])
   }
 
@@ -41,9 +61,10 @@ function LoMultiPlayer(){
         break
       }
     if(row !== null){
-      setpiecesOnBoard(piecesOnBoard.concat({col, row : row, color : pieceColor}))
+      setpiecesOnBoard(piecesOnBoard.concat({col, row : row, color : '#D90000'}))
       const nextPieceColor = pieceColor === '#D90000' ? '#FFF000' : '#D90000'
-      setpieceColor(nextPieceColor)}
+        setpieceColor(nextPieceColor)
+    }
   }
 
   const conquerPiece = () => {
@@ -139,16 +160,6 @@ function LoMultiPlayer(){
       } 
   }
 
-  const checkForDraw = () =>{
-    let empty = 0
-    for(let c = 0; c < 7; c++)
-      for(let r = 0; r < 6; r++){
-        if(getPiece(c, r) == null)
-          ++empty
-      }
-    setDraw(empty)
-  }
-
   const boardCreation = () =>{
     let rowCreations = []
     for (let r = 0; r < 6; r++){
@@ -158,8 +169,7 @@ function LoMultiPlayer(){
         columnCreations.push(
           <div className = "square" onClick = {() => {addPiece(c)}}>
             <div className = "circle">
-              {piece ? <div className = "coloredCircle" 
-              style={{backgroundColor : piece.color}}/> : null}
+              {piece ? <div className = "coloredCircle" style={{backgroundColor : piece.color}}/> : null}
             </div>
           </div>
         )
@@ -169,8 +179,7 @@ function LoMultiPlayer(){
     return(
       <div className = "round-border">
         <div className = "board">
-          {winner ? <div className = 'winner' >{winner + ' wins!'}</div> : null}
-          {!draw ? <div className = 'winner' >Draw</div> : null}
+          {winner ? <div className = 'winner' onClick = {()=>{restartGame()}}>{winner + ' wins!'}</div> : null}
           {rowCreations}
         </div>
       </div>
@@ -182,8 +191,7 @@ function LoMultiPlayer(){
         {boardCreation()}
         <div className = "Buttons2">
           <div>
-            <button onClick = {restartGame} 
-            className = "ButtonsBoard">Restart</button>
+            <button style = {{display: 'none'}} ref={ref} onClick = {() => myfunct()}>Restart</button>
           </div>
           <Link to = "/">
             <div>
@@ -195,5 +203,5 @@ function LoMultiPlayer(){
   )
 }
 
-export default LoMultiPlayer;
+export default SinglePlayerNo;
 

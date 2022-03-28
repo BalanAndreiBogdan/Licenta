@@ -1,14 +1,16 @@
 import React from 'react'
-import {useState, useEffect} from 'react'
+import {useState, useEffect, useRef} from 'react'
 import './BoardGame.css'
 import './App.css'
 import {Link} from 'react-router-dom'
 
-function LoMultiPlayer(){
+function SinglePlayerEz(){
   const [piecesOnBoard, setpiecesOnBoard] = useState([])
   const [pieceColor, setpieceColor] = useState('#D90000')
   const [winner, setWinner] = useState()
-  const [draw, setDraw] = useState(null)
+  const [activateRandom, setActivateRandom] = useState(0)
+  const ref = useRef(null);
+  const [draw, setDraw] = useState()
 
   useEffect(() => {
     conquerPiece()
@@ -19,17 +21,22 @@ function LoMultiPlayer(){
     checkForDraw()
   }, [piecesOnBoard])
 
-  const restartGame = () =>{
+  useEffect(() => {
+    if (activateRandom)
+      setTimeout(() =>{ref.current.click()}, 1500)
+    }, [activateRandom])
+
+  const restartGame = () => {
     setpiecesOnBoard([])
     setWinner()
     setpieceColor('#D90000')
-    setDraw(null)
+    activateRandom(0)
+    setDraw()
   }
 
   const getPiece = (col, row) => {
     for(let element = 0; element < piecesOnBoard.length; element++)
-      if(piecesOnBoard[element].col === col 
-        && piecesOnBoard[element].row === row)
+      if(piecesOnBoard[element].col === col && piecesOnBoard[element].row === row)
         return (piecesOnBoard[element])
   }
 
@@ -42,8 +49,38 @@ function LoMultiPlayer(){
       }
     if(row !== null){
       setpiecesOnBoard(piecesOnBoard.concat({col, row : row, color : pieceColor}))
+      setTimeout(() => {console.log("this is the third message")}, 1000)
+      if(!winner){
       const nextPieceColor = pieceColor === '#D90000' ? '#FFF000' : '#D90000'
-      setpieceColor(nextPieceColor)}
+      setpieceColor(nextPieceColor)
+      setActivateRandom(activateRandom + 1)}
+    }
+  }
+
+  const getRandomRow = (col) =>{
+    for(let r = 5; r >= 0; r--)
+      if(getPiece(col, r) == null )
+        return(r)
+    return(7)
+    }
+
+  const addRandomPiece = () => {
+    let coloana = null
+    let row = null
+    while(true){
+      let col = (Math.floor(Math.random() * 7))
+      let getrow = getRandomRow(col)
+      if(getPiece(col, getrow) == null && getrow < 7){
+        coloana = col
+        row = getrow
+        break
+      }
+    }
+    if(row !== null && winner == null){
+      setpiecesOnBoard(piecesOnBoard.concat({col : coloana, row : row, color : pieceColor}))
+      const nextPieceColor = pieceColor === '#D90000' ? '#FFF000' : '#D90000'
+      setpieceColor(nextPieceColor)
+    }
   }
 
   const conquerPiece = () => {
@@ -158,8 +195,7 @@ function LoMultiPlayer(){
         columnCreations.push(
           <div className = "square" onClick = {() => {addPiece(c)}}>
             <div className = "circle">
-              {piece ? <div className = "coloredCircle" 
-              style={{backgroundColor : piece.color}}/> : null}
+              {piece ? <div className = "coloredCircle" style={{backgroundColor : piece.color}}/> : null}
             </div>
           </div>
         )
@@ -169,8 +205,9 @@ function LoMultiPlayer(){
     return(
       <div className = "round-border">
         <div className = "board">
-          {winner ? <div className = 'winner' >{winner + ' wins!'}</div> : null}
-          {!draw ? <div className = 'winner' >Draw</div> : null}
+          {winner ? <div className = 'winner'>{winner + ' wins!'}</div> : null}
+          {(pieceColor === '#FFF000' && !winner) ? <div className = 'waiting'>Waiting...</div> : null}
+          {!draw ? <div className = 'winner'>Draw</div> : null}
           {rowCreations}
         </div>
       </div>
@@ -182,18 +219,21 @@ function LoMultiPlayer(){
         {boardCreation()}
         <div className = "Buttons2">
           <div>
-            <button onClick = {restartGame} 
-            className = "ButtonsBoard">Restart</button>
+            <button onClick = {restartGame} className = "ButtonsBoard">Restart</button>
           </div>
-          <Link to = "/">
+          <Link to = "/SinglePlayerMenu">
             <div>
               <button className = "ButtonsBoard">Back</button>
             </div>
           </Link>
+          <div>
+            <button style = {{display: 'none'}} ref = {ref} 
+            onClick = {() => addRandomPiece()}>Random Move</button>
+          </div>
         </div>
     </div>
   )
 }
 
-export default LoMultiPlayer;
+export default SinglePlayerEz;
 

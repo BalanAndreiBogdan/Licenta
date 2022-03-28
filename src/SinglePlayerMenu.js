@@ -3,7 +3,7 @@ import './App.css';
 import fundal from './fundal.png';
 import {Link} from 'react-router-dom';
 
-const MainMenu = () => {
+const SinglePlayerMenu = () => {
   return (
     <div className = "MainMenu">
       <div className = "MainPage">
@@ -13,14 +13,17 @@ const MainMenu = () => {
             <h4>Conquest</h4>
           </div>
           <div className = "Buttons">
-            <Link to = "/SinglePlayerMenu">
-                <button className = "ButtonStyle">Single-Player</button>
+            <Link to = "/SinglePlayerEz">
+                <button className = "ButtonStyle">Easy Mode</button>
             </Link>
-            <Link to = "/LoMultiplayer">
-            <button className = "ButtonStyle">Local Multiplayer</button>
+            <Link to = "/SinglePlayerNo">
+            <button className = "ButtonStyle">Normal Mode</button>
             </Link>
-            <Link to = "/OnMultiplayer">
-            <button className = "ButtonStyle">Online Multiplayer</button>
+            <Link to = "/SinglePlayerHd">
+            <button className = "ButtonStyle">Hard Mode</button>
+            </Link>
+            <Link to = "/">
+            <button className = "ButtonStyle">Back</button>
             </Link>
           </div>
         </div>
@@ -32,4 +35,4 @@ const MainMenu = () => {
   );
 }
 
-export default MainMenu;
+export default SinglePlayerMenu;

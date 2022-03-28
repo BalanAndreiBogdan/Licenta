@@ -70,8 +70,22 @@
     color: white;
 }
 
-.winner:hover{
-    cursor: pointer;
+.waiting{
+    position: absolute; 
+    left:0;
+    right:0;
+    top:0;
+    bottom: 0;
+    display: flex; 
+    justify-content: center;
+    align-items: center;
+    font-family: 'Letter Sketch', sans-serif;
+    font-size: 4VW; 
+    border-radius: 60px;
+    z-index: 1;
+    background-color: black; 
+    opacity: 0.5; 
+    color: white;
 }
 
 .Buttons2{
