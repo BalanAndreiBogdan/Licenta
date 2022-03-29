@@ -30,7 +30,7 @@ function SinglePlayerEz(){
     setpiecesOnBoard([])
     setWinner()
     setpieceColor('#D90000')
-    activateRandom(0)
+    setActivateRandom(0)
     setDraw()
   }
 

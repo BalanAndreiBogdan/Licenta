@@ -6,24 +6,12 @@ import {Link} from 'react-router-dom'
 
 function SinglePlayerNo(){
   const [piecesOnBoard, setpiecesOnBoard] = useState([])
-  const [pieceColor, setpieceColor] = useState(0)
+  const [pieceColor, setpieceColor] = useState('#D90000')
   const [winner, setWinner] = useState()
-
+  const [activateRandom, setActivateRandom] = useState(0)
   const ref = useRef(null);
-  
-  const myfunct = () => {
-    console.log('activated')
-        let row = null
-        let col = 0
-        for(let r = 5; r >= 0; r--)
-            if(getPiece(col, r) == null ){
-                row = r
-                break
-            }
-        if(row !== null && winner == null){
-        setpiecesOnBoard(piecesOnBoard.concat({col, row : row, color : '#FFF000'}))
-        }
-  }
+  const [draw, setDraw] = useState()
+  var boardCopy = []
 
   useEffect(() => {
     conquerPiece()
@@ -31,26 +19,32 @@ function SinglePlayerNo(){
     checkForVertWin()
     checkForDiag1Win()
     checkForDiag2Win()
+    checkForDraw()
   }, [piecesOnBoard])
 
   useEffect(() => {
-    if (pieceColor){
-        setTimeout(() => {
-            ref.current.click();
-        }, 5000);
-    }
-    }, [pieceColor]);
+    if (activateRandom)
+      setTimeout(() =>{ref.current.click()}, 1500)
+    }, [activateRandom])
 
-  const restartGame = () =>{
+  const restartGame = () => {
     setpiecesOnBoard([])
     setWinner()
-    // setpieceColor('#D90000')
+    setpieceColor('#D90000')
+    setActivateRandom(0)
+    setDraw()
   }
 
   const getPiece = (col, row) => {
     for(let element = 0; element < piecesOnBoard.length; element++)
       if(piecesOnBoard[element].col === col && piecesOnBoard[element].row === row)
         return (piecesOnBoard[element])
+  }
+
+  const getCopyPiece = (col, row) => {
+    for(let element = 0; element < boardCopy.length; element++)
+      if(boardCopy[element].col === col && boardCopy[element].row === row)
+        return (boardCopy[element])
   }
 
   const addPiece = (col) => {
@@ -61,10 +55,104 @@ function SinglePlayerNo(){
         break
       }
     if(row !== null){
-      setpiecesOnBoard(piecesOnBoard.concat({col, row : row, color : '#D90000'}))
+      setpiecesOnBoard(piecesOnBoard.concat({col, row : row, color : pieceColor}))
+      if(!winner){
       const nextPieceColor = pieceColor === '#D90000' ? '#FFF000' : '#D90000'
-        setpieceColor(nextPieceColor)
+      setpieceColor(nextPieceColor)
+      setActivateRandom(activateRandom + 1)}
     }
+  }
+
+  const getAIRow = (col) =>{
+    for(let r = 5; r >= 0; r--)
+      if(getPiece(col, r) == null )
+        return(r)
+    return(7)
+    }
+
+  const addAIPiece = () => {
+    let coloana = null
+    let row = null
+    while(true){
+      let col = AIPick()
+      let getrow = getAIRow(col)
+      if(getPiece(col, getrow) == null && getrow < 7){
+        coloana = col
+        row = getrow
+        break
+      }
+    }
+    if(row !== null && winner == null){
+      setpiecesOnBoard(piecesOnBoard.concat({col : coloana, row : row, color : pieceColor}))
+      const nextPieceColor = pieceColor === '#D90000' ? '#FFF000' : '#D90000'
+      setpieceColor(nextPieceColor)
+    }
+  }
+
+  const addCopyPiece = (col, row) => {
+    boardCopy = boardCopy.concat({col, row : row, color : pieceColor})
+  }
+
+  const scoreOnMove = () => {
+    let score = 0
+    for(let c = 0; c < 4; c++)
+      for(let r = 0; r < 6; r++){
+        let piece1 = getCopyPiece(c, r)
+        let piece2 = getCopyPiece(c+1, r)
+        let piece3 = getCopyPiece(c+2, r)
+        let piece4 = getCopyPiece(c+3, r)
+        if((piece1 && piece2 && piece3 && piece4) 
+          &&(piece1.color === pieceColor 
+          && piece2.color === pieceColor
+          && piece3.color === pieceColor 
+          && piece4.color === pieceColor ))
+            score = score + 100
+        if((piece1 == null && piece2 && piece3 && piece4) 
+          && (piece2.color === pieceColor
+          && piece3.color === pieceColor  
+          && piece4.color === pieceColor ))
+            score = score + 10
+        if((piece1 && piece2 == null && piece3 && piece4) 
+          && (piece1.color === pieceColor
+          && piece3.color === pieceColor  
+          && piece4.color === pieceColor ))
+            score = score + 10
+        if((piece1 && piece2 && piece3 == null && piece4) 
+          && (piece1.color === pieceColor
+          && piece2.color === pieceColor 
+          && piece4.color === pieceColor))
+            score = score + 10
+        if((piece1 && piece2 && piece3 && piece4 == null) 
+          && (piece1.color === pieceColor
+          && piece2.color === pieceColor 
+          && piece3.color === pieceColor))
+            score = score + 10
+      }
+    return score
+  }
+
+  const AIPick = () => {
+    let maxScore = 0
+    let AIcol = Math.floor(Math.random() * 7)
+    for(let c = 0; c < 7; c++){
+      let row = null
+      boardCopy = piecesOnBoard
+      for(let r = 5; r >= 0; r--){
+        if(getCopyPiece(c, r) == null ){
+          row = r
+          break
+        }
+      }
+      if(row !== null){
+        addCopyPiece(c, row)
+        let score = scoreOnMove()
+        if(score > maxScore){
+          maxScore = score
+          AIcol = c
+        }
+      }
+    }
+    return AIcol    
   }
 
   const conquerPiece = () => {
@@ -160,6 +248,16 @@ function SinglePlayerNo(){
       } 
   }
 
+  const checkForDraw = () =>{
+    let empty = 0
+    for(let c = 0; c < 7; c++)
+      for(let r = 0; r < 6; r++){
+        if(getPiece(c, r) == null)
+          ++empty
+      }
+    setDraw(empty)
+  }
+
   const boardCreation = () =>{
     let rowCreations = []
     for (let r = 0; r < 6; r++){
@@ -179,7 +277,9 @@ function SinglePlayerNo(){
     return(
       <div className = "round-border">
         <div className = "board">
-          {winner ? <div className = 'winner' onClick = {()=>{restartGame()}}>{winner + ' wins!'}</div> : null}
+          {winner ? <div className = 'winner'>{winner + ' wins!'}</div> : null}
+          {(pieceColor === '#FFF000' && !winner) ? <div className = 'waiting'>Waiting...</div> : null}
+          {!draw ? <div className = 'winner'>Draw</div> : null}
           {rowCreations}
         </div>
       </div>
@@ -191,13 +291,17 @@ function SinglePlayerNo(){
         {boardCreation()}
         <div className = "Buttons2">
           <div>
-            <button style = {{display: 'none'}} ref={ref} onClick = {() => myfunct()}>Restart</button>
+            <button onClick = {restartGame} className = "ButtonsBoard">Restart</button>
           </div>
-          <Link to = "/">
+          <Link to = "/SinglePlayerMenu">
             <div>
               <button className = "ButtonsBoard">Back</button>
             </div>
           </Link>
+          <div>
+            <button style = {{display: 'none'}} ref = {ref} 
+            onClick = {() => addAIPiece()}>Random Move</button>
+          </div>
         </div>
     </div>
   )
