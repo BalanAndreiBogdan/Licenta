@@ -11,7 +11,6 @@ function SinglePlayerNo(){
   const [activateRandom, setActivateRandom] = useState(0)
   const ref = useRef(null);
   const [draw, setDraw] = useState()
-  var boardCopy = []
 
   useEffect(() => {
     conquerPiece()
@@ -41,10 +40,10 @@ function SinglePlayerNo(){
         return (piecesOnBoard[element])
   }
 
-  const getCopyPiece = (col, row) => {
-    for(let element = 0; element < boardCopy.length; element++)
-      if(boardCopy[element].col === col && boardCopy[element].row === row)
-        return (boardCopy[element])
+  const getCopyPiece = (col, row, boardy) => {
+    for(let element = 0; element < boardy.length; element++)
+      if(boardy[element].col === col && boardy[element].row === row)
+        return (boardy[element])
   }
 
   const addPiece = (col) => {
@@ -74,7 +73,7 @@ function SinglePlayerNo(){
     let coloana = null
     let row = null
     while(true){
-      let col = AIPick()
+      let col = minimax(piecesOnBoard, 4, true)[0]
       let getrow = getAIRow(col)
       if(getPiece(col, getrow) == null && getrow < 7){
         coloana = col
@@ -89,70 +88,456 @@ function SinglePlayerNo(){
     }
   }
 
-  const addCopyPiece = (col, row) => {
-    boardCopy = boardCopy.concat({col, row : row, color : pieceColor})
+  const addMiniMaxPiece = (col, row, boardy, color) => {
+    return boardy.concat({col, row : row, color : color})
   }
 
-  const scoreOnMove = () => {
+  const scoreOnMove = (boardy) => {
     let score = 0
+    const AI = '#FFF000'
+    const PL = '#D90000'
+    
+    for(let r = 0; r < 6; r++){
+      let piece = getCopyPiece(3, r, boardy)
+      if(piece && piece.color === AI) 
+        score = score + 3
+    }
+
     for(let c = 0; c < 4; c++)
       for(let r = 0; r < 6; r++){
-        let piece1 = getCopyPiece(c, r)
-        let piece2 = getCopyPiece(c+1, r)
-        let piece3 = getCopyPiece(c+2, r)
-        let piece4 = getCopyPiece(c+3, r)
-        if((piece1 && piece2 && piece3 && piece4) 
-          &&(piece1.color === pieceColor 
-          && piece2.color === pieceColor
-          && piece3.color === pieceColor 
-          && piece4.color === pieceColor ))
-            score = score + 100
+        let piece1 = getCopyPiece(c, r, boardy)
+        let piece2 = getCopyPiece(c + 1, r, boardy)
+        let piece3 = getCopyPiece(c + 2, r, boardy)
+        let piece4 = getCopyPiece(c + 3, r, boardy)
         if((piece1 == null && piece2 && piece3 && piece4) 
-          && (piece2.color === pieceColor
-          && piece3.color === pieceColor  
-          && piece4.color === pieceColor ))
-            score = score + 10
+          && (piece2.color === AI
+          && piece3.color === AI  
+          && piece4.color === AI ))
+            score = score + 5
         if((piece1 && piece2 == null && piece3 && piece4) 
-          && (piece1.color === pieceColor
-          && piece3.color === pieceColor  
-          && piece4.color === pieceColor ))
-            score = score + 10
+          && (piece1.color === AI
+          && piece3.color === AI  
+          && piece4.color === AI ))
+            score = score + 5
         if((piece1 && piece2 && piece3 == null && piece4) 
-          && (piece1.color === pieceColor
-          && piece2.color === pieceColor 
-          && piece4.color === pieceColor))
-            score = score + 10
+          && (piece1.color === AI
+          && piece2.color === AI 
+          && piece4.color === AI))
+            score = score + 5
         if((piece1 && piece2 && piece3 && piece4 == null) 
-          && (piece1.color === pieceColor
-          && piece2.color === pieceColor 
-          && piece3.color === pieceColor))
-            score = score + 10
+          && (piece1.color === AI
+          && piece2.color === AI 
+          && piece3.color === AI))
+            score = score + 5
+        if((piece1 == null && piece2 && piece3 && piece4) 
+          && (piece2.color === PL
+          && piece3.color === PL 
+          && piece4.color === PL ))
+            score = score - 4
+        if((piece1 && piece2 == null && piece3 && piece4) 
+          && (piece1.color === PL
+          && piece3.color === PL 
+          && piece4.color === PL ))
+            score = score - 4
+        if((piece1 && piece2 && piece3 == null && piece4) 
+          && (piece1.color === PL
+          && piece2.color === PL 
+          && piece4.color === PL))
+            score = score - 4
+        if((piece1 && piece2 && piece3 && piece4 == null) 
+          && (piece1.color === PL
+          && piece2.color === PL 
+          && piece3.color === PL))
+            score = score - 4
+        if((piece1 && piece2 && piece3 == null && piece4 == null) 
+          && (piece1.color === AI
+          && piece2.color === AI))
+            score = score + 2
+        if((piece1 && piece2 == null && piece3 && piece4 == null) 
+          && (piece1.color === AI
+          && piece3.color === AI))
+            score = score + 2
+        if((piece1 && piece2 == null && piece3 == null && piece4) 
+          && (piece1.color === AI
+          && piece4.color === AI))
+            score = score + 2
+        if((piece1 == null && piece2 && piece3 && piece4 == null) 
+          && (piece2.color === AI
+          && piece3.color === AI))
+            score = score + 2
+        if((piece1 == null && piece2 && piece3 == null && piece4) 
+          && (piece2.color === AI
+          && piece4.color === AI))
+            score = score + 2
+        if((piece1 == null && piece2 == null && piece3 && piece4) 
+          && (piece3.color === AI
+          && piece4.color === AI))
+            score = score + 2
       }
+    
+    for(let c = 0; c < 7; c++)
+      for(let r = 0; r < 3; r++){
+        let piece1 = getCopyPiece(c, r, boardy)
+        let piece2 = getCopyPiece(c, r + 1, boardy)
+        let piece3 = getCopyPiece(c, r + 2, boardy)
+        let piece4 = getCopyPiece(c, r + 3, boardy)
+        if((piece1 == null && piece2 && piece3 && piece4) 
+          && (piece2.color === AI
+          && piece3.color === AI  
+          && piece4.color === AI ))
+            score = score + 5
+        if((piece1 && piece2 == null && piece3 && piece4) 
+          && (piece1.color === AI
+          && piece3.color === AI  
+          && piece4.color === AI ))
+            score = score + 5
+        if((piece1 && piece2 && piece3 == null && piece4) 
+          && (piece1.color === AI
+          && piece2.color === AI 
+          && piece4.color === AI))
+            score = score + 5
+        if((piece1 && piece2 && piece3 && piece4 == null) 
+          && (piece1.color === AI
+          && piece2.color === AI 
+          && piece3.color === AI))
+            score = score + 5
+        if((piece1 == null && piece2 && piece3 && piece4) 
+          && (piece2.color === PL
+          && piece3.color === PL 
+          && piece4.color === PL ))
+            score = score - 4
+        if((piece1 && piece2 == null && piece3 && piece4) 
+          && (piece1.color === PL
+          && piece3.color === PL  
+          && piece4.color === PL ))
+            score = score - 4
+        if((piece1 && piece2 && piece3 == null && piece4) 
+          && (piece1.color === PL
+          && piece2.color === PL 
+          && piece4.color === PL))
+            score = score - 4
+        if((piece1 && piece2 && piece3 && piece4 == null) 
+          && (piece1.color === PL
+          && piece2.color === PL
+          && piece3.color === PL))
+            score = score - 4
+        if((piece1 && piece2 && piece3 == null && piece4 == null) 
+          && (piece1.color === AI
+          && piece2.color === AI))
+            score = score + 2
+        if((piece1 && piece2 == null && piece3 && piece4 == null) 
+          && (piece1.color === AI
+          && piece3.color === AI))
+            score = score + 2
+        if((piece1 && piece2 == null && piece3 == null && piece4) 
+          && (piece1.color === AI
+          && piece4.color === AI))
+            score = score + 2
+        if((piece1 == null && piece2 && piece3 && piece4 == null) 
+          && (piece2.color === AI
+          && piece3.color === AI))
+            score = score + 2
+        if((piece1 == null && piece2 && piece3 == null && piece4) 
+          && (piece2.color === AI
+          && piece4.color === AI))
+            score = score + 2
+        if((piece1 == null && piece2 == null && piece3 && piece4) 
+          && (piece3.color === AI
+          && piece4.color === AI))
+            score = score + 2
+      }
+
+    for(let c = 0; c < 4; c++)
+      for(let r = 0; r < 3; r++){
+        let piece1 = getCopyPiece(c, r, boardy)
+        let piece2 = getCopyPiece(c + 1, r + 1, boardy)
+        let piece3 = getCopyPiece(c + 2, r + 2, boardy)
+        let piece4 = getCopyPiece(c + 3, r + 3, boardy)
+        if((piece1 == null && piece2 && piece3 && piece4) 
+          && (piece2.color === AI
+          && piece3.color === AI  
+          && piece4.color === AI ))
+            score = score + 5
+        if((piece1 && piece2 == null && piece3 && piece4) 
+          && (piece1.color === AI
+          && piece3.color === AI  
+          && piece4.color === AI ))
+            score = score + 5
+        if((piece1 && piece2 && piece3 == null && piece4) 
+          && (piece1.color === AI
+          && piece2.color === AI 
+          && piece4.color === AI))
+            score = score + 5
+        if((piece1 && piece2 && piece3 && piece4 == null) 
+          && (piece1.color === AI
+          && piece2.color === AI 
+          && piece3.color === AI))
+            score = score + 5
+        if((piece1 == null && piece2 && piece3 && piece4) 
+          && (piece2.color === PL
+          && piece3.color === PL
+          && piece4.color === PL ))
+            score = score - 4
+        if((piece1 && piece2 == null && piece3 && piece4) 
+          && (piece1.color === PL
+          && piece3.color === PL  
+          && piece4.color === PL ))
+            score = score - 4
+        if((piece1 && piece2 && piece3 == null && piece4) 
+          && (piece1.color === PL
+          && piece2.color === PL 
+          && piece4.color === PL))
+            score = score - 4
+        if((piece1 && piece2 && piece3 && piece4 == null) 
+          && (piece1.color === PL
+          && piece2.color === PL
+          && piece3.color === PL))
+            score = score - 4
+        if((piece1 && piece2 && piece3 == null && piece4 == null) 
+          && (piece1.color === AI
+          && piece2.color === AI))
+            score = score + 2
+        if((piece1 && piece2 == null && piece3 && piece4 == null) 
+          && (piece1.color === AI
+          && piece3.color === AI))
+            score = score + 2
+        if((piece1 && piece2 == null && piece3 == null && piece4) 
+          && (piece1.color === AI
+          && piece4.color === AI))
+            score = score + 2
+        if((piece1 == null && piece2 && piece3 && piece4 == null) 
+          && (piece2.color === AI
+          && piece3.color === AI))
+            score = score + 2
+        if((piece1 == null && piece2 && piece3 == null && piece4) 
+          && (piece2.color === AI
+          && piece4.color === AI))
+            score = score + 2
+        if((piece1 == null && piece2 == null && piece3 && piece4) 
+          && (piece3.color === AI
+          && piece4.color === AI))
+            score = score + 2
+      }
+
+    for(let c = 3; c < 7; c++)
+      for(let r = 0; r < 3; r++){
+        let piece1 = getCopyPiece(c, r, boardy)
+        let piece2 = getCopyPiece(c + 1, r - 1, boardy)
+        let piece3 = getCopyPiece(c + 2, r - 2, boardy)
+        let piece4 = getCopyPiece(c + 3, r - 3, boardy)
+        if((piece1 == null && piece2 && piece3 && piece4) 
+          && (piece2.color === AI
+          && piece3.color === AI  
+          && piece4.color === AI ))
+            score = score + 5
+        if((piece1 && piece2 == null && piece3 && piece4) 
+          && (piece1.color === AI
+          && piece3.color === AI  
+          && piece4.color === AI ))
+            score = score + 5
+        if((piece1 && piece2 && piece3 == null && piece4) 
+          && (piece1.color === AI
+          && piece2.color === AI 
+          && piece4.color === AI))
+            score = score + 5
+        if((piece1 && piece2 && piece3 && piece4 == null) 
+          && (piece1.color === AI
+          && piece2.color === AI 
+          && piece3.color === AI))
+            score = score + 5
+        if((piece1 == null && piece2 && piece3 && piece4) 
+          && (piece2.color === PL
+          && piece3.color === PL  
+          && piece4.color === PL ))
+            score = score - 4
+        if((piece1 && piece2 == null && piece3 && piece4) 
+          && (piece1.color === PL
+          && piece3.color === PL 
+          && piece4.color === PL ))
+            score = score - 4
+        if((piece1 && piece2 && piece3 == null && piece4) 
+          && (piece1.color === PL
+          && piece2.color === PL 
+          && piece4.color === PL))
+            score = score - 4
+        if((piece1 && piece2 && piece3 && piece4 == null) 
+          && (piece1.color === PL
+          && piece2.color === PL 
+          && piece3.color === PL))
+            score = score - 4
+        if((piece1 && piece2 && piece3 == null && piece4 == null) 
+          && (piece1.color === AI
+          && piece2.color === AI))
+            score = score + 2
+        if((piece1 && piece2 == null && piece3 && piece4 == null) 
+          && (piece1.color === AI
+          && piece3.color === AI))
+            score = score + 2
+        if((piece1 && piece2 == null && piece3 == null && piece4) 
+          && (piece1.color === AI
+          && piece4.color === AI))
+            score = score + 2
+        if((piece1 == null && piece2 && piece3 && piece4 == null) 
+          && (piece2.color === AI
+          && piece3.color === AI))
+            score = score + 2
+        if((piece1 == null && piece2 && piece3 == null && piece4) 
+          && (piece2.color === AI
+          && piece4.color === AI))
+            score = score + 2
+        if((piece1 == null && piece2 == null && piece3 && piece4) 
+          && (piece3.color === AI
+          && piece4.color === AI))
+            score = score + 2
+      }
+    
+    for(let c = 1; c < 6; c++)
+      for(let r = 1; r < 5; r++){
+        let piece = getCopyPiece(c, r, boardy)
+        let piece1 = getCopyPiece(c, r - 1, boardy)
+        let piece2 = getCopyPiece(c - 1, r, boardy)
+        let piece3 = getCopyPiece(c + 1, r, boardy)
+        let piece4 = getCopyPiece(c, r + 1, boardy)
+        if((piece && piece1 && piece2 && piece3 && piece4) 
+          && (piece1.color === AI
+          && piece2.color === AI
+          && piece3.color === AI
+          && piece4.color === AI  
+          && piece.color !== AI))
+            score = score + 10
+        if((piece && piece1 && piece2 && piece3 && piece4) 
+          && (piece1.color === PL
+          && piece2.color === PL
+          && piece3.color === PL
+          && piece4.color === PL  
+          && piece.color !== PL))
+            score = score - 8
+      }
+    
+    for(let c = 1; c < 6; c++)
+      for(let r = 1; r < 5; r++){
+        let piece = getCopyPiece(c, r, boardy)
+        let piece1 = getCopyPiece(c, r - 1, boardy)
+        let piece2 = getCopyPiece(c - 1, r, boardy)
+        let piece3 = getCopyPiece(c + 1, r, boardy)
+        let piece4 = getCopyPiece(c, r + 1, boardy)
+        if((piece && piece1 && piece2 && piece3 && piece4) 
+          && (piece1.color === AI
+          && piece2.color === AI
+          && piece3.color === AI
+          && piece4.color === AI  
+          && piece.color !== AI))
+            score = score + 10
+        if((piece && piece1 && piece2 && piece3 && piece4) 
+          && (piece1.color === PL
+          && piece2.color === PL
+          && piece3.color === PL
+          && piece4.color === PL  
+          && piece.color !== PL))
+            score = score - 8
+      }
+
+    for(let c = 1; c < 6; c++)
+      for(let r = 1; r < 5; r++){
+        let piece = getCopyPiece(c, r, boardy)
+        let piece1 = getCopyPiece(c, r - 1, boardy)
+        let piece2 = getCopyPiece(c - 1, r, boardy)
+        let piece3 = getCopyPiece(c + 1, r, boardy)
+        let piece4 = getCopyPiece(c, r + 1, boardy)
+        if((piece && piece1 && piece2 && piece3 && piece4 == null) 
+          && (piece1.color === AI
+          && piece2.color === AI
+          && piece3.color === AI  
+          && piece.color !== AI))
+            score = score + 4
+        if((piece && piece1 && piece2 && piece3 == null && piece4) 
+          && (piece1.color === AI
+          && piece2.color === AI
+          && piece4.color === AI  
+          && piece.color !== AI))
+            score = score + 4
+        if((piece && piece1 == null && piece2 && piece3 && piece4) 
+          && (piece2.color === AI
+          && piece3.color === AI
+          && piece4.color === AI  
+          && piece.color !== AI))
+            score = score + 4
+      }
+    
     return score
   }
 
-  const AIPick = () => {
-    let maxScore = 0
-    let AIcol = Math.floor(Math.random() * 7)
-    for(let c = 0; c < 7; c++){
-      let row = null
-      boardCopy = piecesOnBoard
-      for(let r = 5; r >= 0; r--){
-        if(getCopyPiece(c, r) == null ){
-          row = r
-          break
-        }
-      }
-      if(row !== null){
-        addCopyPiece(c, row)
-        let score = scoreOnMove()
-        if(score > maxScore){
-          maxScore = score
-          AIcol = c
-        }
-      }
+  const minimax = (boardy, depth, maximizingPlayer) =>{
+
+    const AI = '#FFF000'
+    const PL = '#D90000'
+
+    if(checkForCopyOrizWin(boardy)[0] || checkForCopyVertWin(boardy)[0] 
+    || checkForCopyDiag1Win(boardy)[0] || checkForCopyDiag2Win(boardy)[0]
+    || checkForCopyDraw(boardy) || depth === 0){
+      if((checkForCopyOrizWin(boardy, PL)[0] && checkForCopyOrizWin(boardy)[1] === PL)
+      || (checkForCopyVertWin(boardy, PL)[0] && checkForCopyVertWin(boardy)[1] === PL)
+      || (checkForCopyDiag1Win(boardy, PL)[0] && checkForCopyDiag1Win(boardy)[1] === PL)
+      || (checkForCopyDiag2Win(boardy, PL)[0] && checkForCopyDiag2Win(boardy)[1] === PL))
+        return ([null, -10000000 - depth])
+      else if((checkForCopyOrizWin(boardy, AI)[0] && checkForCopyOrizWin(boardy)[1] === AI)
+      || (checkForCopyVertWin(boardy, AI)[0] && checkForCopyVertWin(boardy)[1] === AI)
+      || (checkForCopyDiag1Win(boardy, AI)[0] && checkForCopyDiag1Win(boardy)[1] === AI)
+      || (checkForCopyDiag2Win(boardy, AI)[0] && checkForCopyDiag2Win(boardy)[1] === AI))
+        {console.log(1000000+depth); return ([null, 10000000 +  depth])}
+      else if(checkForCopyDraw(boardy))
+        return ([null,0])
+      else
+        return ([null, scoreOnMove(boardy)])
     }
-    return AIcol    
+
+    if(maximizingPlayer){
+      let score = -99999999
+      let col = Math.floor(Math.random() * 7)
+      let row = null
+      for( let c = 0; c < 7; c++){
+        for(let r = 5; r >= 0; r--){
+          if(getCopyPiece(c, r, boardy) == null ){
+            row = r
+            break
+          }
+        }
+        if(row !== null){
+          let boardCopy = boardy
+          let boardAddPiece = addMiniMaxPiece(c, row, boardCopy, AI)
+          let newScore = minimax(boardAddPiece, depth - 1, false)[1]
+          if(newScore > score){
+            score = newScore
+            col = c
+          }
+        }
+      }
+      return ([col, score])
+    }
+
+    else{
+      let score = 99999999
+      let col = Math.floor(Math.random() * 7)
+      let row = null
+      for( let c = 0; c < 7; c++){
+        for(let r = 5; r >= 0; r--){
+          if(getCopyPiece(c, r, boardy) == null ){
+            row = r
+            break
+          }
+        }
+        if(row !== null){
+          let boardCopy = boardy
+          let boardAddPiece = addMiniMaxPiece(c, row, boardCopy, PL)
+          let newScore = minimax(boardAddPiece, depth - 1, true)[1]
+          if(newScore < score){
+            score = newScore
+            col = c
+          }
+        }
+      }
+      return ([col, score])
+    }
   }
 
   const conquerPiece = () => {
@@ -180,13 +565,30 @@ function SinglePlayerNo(){
       } 
   }
 
+  const checkForCopyOrizWin = (boardy) => {
+    for(let c = 0; c < 4; c++)
+      for(let r = 0; r < 6; r++){
+        let piece1 = getCopyPiece(c, r, boardy)
+        let piece2 = getCopyPiece(c + 1, r, boardy)
+        let piece3 = getCopyPiece(c + 2, r, boardy)
+        let piece4 = getCopyPiece(c + 3, r, boardy)
+        if((piece1 && piece2 && piece3 && piece4) 
+          &&(piece1.color === piece2.color 
+          && piece2.color === piece3.color 
+          && piece3.color === piece4.color)){
+            return ([true, piece1.color])
+        }
+      }
+    return [false, null] 
+  }
+
   const checkForOrizWin = () => {
     for(let c = 0; c < 4; c++)
       for(let r = 0; r < 6; r++){
         let piece1 = getPiece(c, r)
-        let piece2 = getPiece(c+1, r)
-        let piece3 = getPiece(c+2, r)
-        let piece4 = getPiece(c+3, r)
+        let piece2 = getPiece(c + 1, r)
+        let piece3 = getPiece(c + 2, r)
+        let piece4 = getPiece(c + 3, r)
         if((piece1 && piece2 && piece3 && piece4) 
           &&(piece1.color === piece2.color 
           && piece2.color === piece3.color 
@@ -195,6 +597,23 @@ function SinglePlayerNo(){
             setWinner(winner)
         }
       } 
+  }
+
+  const checkForCopyVertWin = (boardy) => {
+    for(let c = 0; c < 7; c++)
+      for(let r = 0; r < 3; r++){
+        let piece1 = getCopyPiece(c, r, boardy)
+        let piece2 = getCopyPiece(c, r + 1, boardy)
+        let piece3 = getCopyPiece(c, r + 2, boardy)
+        let piece4 = getCopyPiece(c, r + 3, boardy)
+        if((piece1 && piece2 && piece3 && piece4) 
+          && (piece1.color === piece2.color 
+          && piece2.color === piece3.color 
+          && piece3.color === piece4.color)){
+            return [true, piece1.color]
+          }
+      }
+    return [false, null] 
   }
 
   const checkForVertWin = () => {
@@ -214,6 +633,23 @@ function SinglePlayerNo(){
       } 
   }
 
+  const checkForCopyDiag1Win = (boardy) => {
+    for(let c = 0; c < 4; c++)
+      for(let r = 0; r < 3; r++){
+        let piece1 = getPiece(c, r, boardy)
+        let piece2 = getPiece(c + 1, r + 1, boardy)
+        let piece3 = getPiece(c + 2, r + 2, boardy)
+        let piece4 = getPiece(c + 3, r + 3, boardy)
+        if((piece1 && piece2 && piece3 && piece4) 
+          &&(piece1.color === piece2.color 
+          && piece2.color === piece3.color 
+          && piece3.color === piece4.color)){
+            return [true, piece1.color]
+          }
+      }
+    return [false, null]   
+  }
+
   const checkForDiag1Win = () => {
     for(let c = 0; c < 4; c++)
       for(let r = 0; r < 3; r++){
@@ -231,6 +667,23 @@ function SinglePlayerNo(){
       } 
   }
 
+  const checkForCopyDiag2Win = (boardy) => {
+    for(let c = 3; c < 7; c++)
+      for(let r = 0; r < 3; r++){
+        let piece1 = getCopyPiece(c, r, boardy)
+        let piece2 = getCopyPiece(c - 1, r + 1, boardy)
+        let piece3 = getCopyPiece(c - 2, r + 2, boardy)
+        let piece4 = getCopyPiece(c - 3, r + 3, boardy)
+        if((piece1 && piece2 && piece3 && piece4) 
+          &&(piece1.color === piece2.color 
+          && piece2.color === piece3.color 
+          && piece3.color === piece4.color)){
+            return [true, piece1.color]
+          }
+      }
+    return [false, null] 
+  }
+
   const checkForDiag2Win = () => {
     for(let c = 3; c < 7; c++)
       for(let r = 0; r < 3; r++){
@@ -246,6 +699,15 @@ function SinglePlayerNo(){
             setWinner(winner)
           }
       } 
+  }
+
+  const checkForCopyDraw = (boardy) =>{
+    for(let c = 0; c < 7; c++)
+      for(let r = 0; r < 6; r++){
+        if(getCopyPiece(c, r, boardy) == null)
+          return false
+      }
+    return true
   }
 
   const checkForDraw = () =>{
