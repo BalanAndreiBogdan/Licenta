@@ -21,8 +21,8 @@ function LoMultiPlayer(){
 
   const restartGame = () =>{
     setpiecesOnBoard([])
-    setWinner()
     setpieceColor('#D90000')
+    setWinner()
     setDraw(null)
   }
 
