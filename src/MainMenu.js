@@ -19,9 +19,6 @@ const MainMenu = () => {
             <Link to = "/LoMultiplayer">
             <button className = "ButtonStyle">Local Multiplayer</button>
             </Link>
-            <Link to = "/OnMultiplayer">
-            <button className = "ButtonStyle">Online Multiplayer</button>
-            </Link>
           </div>
         </div>
         <div className = "TableImage">

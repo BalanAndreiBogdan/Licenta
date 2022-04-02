@@ -7,7 +7,7 @@ const SinglePlayerMenu = () => {
   return (
     <div className = "MainMenu">
       <div className = "MainPage">
-        <div className = "Menu">
+        <div className = "Menu2">
           <div className = "Title">
             <h3>Connect 4:</h3>
             <h4>Conquest</h4>
@@ -23,7 +23,7 @@ const SinglePlayerMenu = () => {
             <button className = "ButtonStyle">Hard Mode</button>
             </Link>
             <Link to = "/">
-            <button className = "ButtonStyle">Back</button>
+            <button className = "ButtonStyle2">Back</button>
             </Link>
           </div>
         </div>

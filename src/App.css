@@ -37,7 +37,16 @@ nav{
 }
 
 .Menu{
-    margin-top: 7vh;
+    margin-top: 12vh;
+    flex:1;
+    display: flex;
+    justify-content: center;
+    gap: 7vh;
+    flex-direction: column;
+}
+
+.Menu2{
+    margin-top: 6vh;
     flex:1;
     display: flex;
     justify-content: center;
@@ -99,7 +108,30 @@ nav{
     cursor: pointer;
     -webkit-filter: brightness(70%);
             filter: brightness(70%);
-  }
+}
+
+.ButtonStyle2{
+    margin-bottom: 3vh;
+    width: 20vh;
+    height: 5vh;
+    font-family: sans-serif;
+    font-weight: bold;
+    border-radius: 20px;
+    border-width: thick;
+    border-color: #b03636;
+    color: #fada5e;
+    background-color: #b03636;
+    font-size: 15px;
+    transition-duration: 0.4s;
+    -webkit-filter: brightness(100%);
+            filter: brightness(100%);
+}
+
+.ButtonStyle2:hover{
+    cursor: pointer;
+    -webkit-filter: brightness(70%);
+            filter: brightness(70%);
+}
 
 .Fundal{
     width: auto;
@@ -132,6 +164,10 @@ nav{
     .Menu{
         margin-top: 70px;
     }
+
+    .Menu2{
+        margin-top: 70px;
+    }
 }
 
 @media screen and (max-width: 473px) {
@@ -149,6 +185,12 @@ nav{
         width: 30vh;
         height: 4vh;
         font-size: 13px;
+    }
+
+    .ButtonStyle2{
+        width: 15vh;
+        height: 4vh;
+        font-size: 12px;
     }
 }
   

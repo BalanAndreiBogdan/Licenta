@@ -7,7 +7,6 @@ import SinglePlayerMenu from './SinglePlayerMenu.js';
 import SinglePlayerEz from './SinglePlayerEz';
 import SinglePlayerNo from './SinglePlayerNo';
 import SinglePlayerHd from './SinglePlayerHd';
-import OnMultiplayer from './OnMultiplayer.js';
 import {BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 const App = () => {
@@ -22,7 +21,6 @@ const App = () => {
           <Route path = "/SinglePlayerNo" element = {<SinglePlayerNo/>} />
           <Route path = "/SinglePlayerHd" element = {<SinglePlayerHd/>} />
           <Route path = "/LoMultiPlayer" element = {<LoMultiPlayer/>} />
-          <Route path = "/OnMultiplayer" element = {<OnMultiplayer/>} />
         </Routes>
       </div>
     </Router>
