@@ -9,8 +9,8 @@ function SinglePlayerEz(){
   const [pieceColor, setpieceColor] = useState('#D90000')
   const [winner, setWinner] = useState()
   const [activateRandom, setActivateRandom] = useState(0)
-  const ref = useRef(null);
   const [draw, setDraw] = useState()
+  const ref = useRef(null);
 
   useEffect(() => {
     conquerPiece()
@@ -28,8 +28,8 @@ function SinglePlayerEz(){
 
   const restartGame = () => {
     setpiecesOnBoard([])
-    setWinner()
     setpieceColor('#D90000')
+    setWinner()
     setActivateRandom(0)
     setDraw()
   }
@@ -49,7 +49,6 @@ function SinglePlayerEz(){
       }
     if(row !== null){
       setpiecesOnBoard(piecesOnBoard.concat({col, row : row, color : pieceColor}))
-      setTimeout(() => {console.log("this is the third message")}, 1000)
       if(!winner){
       const nextPieceColor = pieceColor === '#D90000' ? '#FFF000' : '#D90000'
       setpieceColor(nextPieceColor)
@@ -236,4 +235,3 @@ function SinglePlayerEz(){
 }
 
 export default SinglePlayerEz;
-
