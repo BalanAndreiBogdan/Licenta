@@ -72,15 +72,10 @@ function SinglePlayerHd(){
   const addAIPiece = () => {
     let coloana = null
     let row = null
-    while(true){
-      let col = alphabeta(piecesOnBoard, 6, -99999999, 99999999, true)[0]
-      let getrow = getAIRow(col)
-      if(getPiece(col, getrow) == null && getrow < 7){
-        coloana = col
-        row = getrow
-        break
-      }
-    }
+    let col = alphabeta(piecesOnBoard, 6, -99999999, 99999999, true)[0]
+    let getrow = getAIRow(col)
+    row = getrow
+    coloana = col
     if(row !== null && winner == null){
       setpiecesOnBoard(piecesOnBoard.concat({col : coloana, row : row, color : pieceColor}))
       const nextPieceColor = pieceColor === '#D90000' ? '#FFF000' : '#D90000'
@@ -406,7 +401,7 @@ function SinglePlayerHd(){
           && piece4.color === AI
           && piece5.color === AI  
           && piece.color !== AI))
-            score = score + 800
+            score = score + 8000
         if((piece && piece1 && piece2 && piece3 && piece4 && piece5) 
           && (piece1.color === PL
           && piece2.color === PL
@@ -414,7 +409,7 @@ function SinglePlayerHd(){
           && piece4.color === PL
           && piece5.color === PL  
           && piece.color !== PL))
-            score = score - 800
+            score = score - 8000
       }
 
     for(let c = 1; c < 5; c++)
@@ -432,7 +427,7 @@ function SinglePlayerHd(){
           && piece4.color === AI
           && piece5.color === AI  
           && piece.color !== AI))
-            score = score + 800
+            score = score + 8000
         if((piece && piece1 && piece2 && piece3 && piece4 && piece5) 
           && (piece1.color === PL
           && piece2.color === PL
@@ -440,7 +435,7 @@ function SinglePlayerHd(){
           && piece4.color === PL
           && piece5.color === PL  
           && piece.color !== PL))
-            score = score - 800
+            score = score - 8000
       }
 
     for(let c = 2; c < 6; c++)
@@ -458,7 +453,7 @@ function SinglePlayerHd(){
           && piece4.color === AI
           && piece5.color === AI  
           && piece.color !== AI))
-            score = score + 800
+            score = score + 8000
         if((piece && piece1 && piece2 && piece3 && piece4 && piece5) 
           && (piece1.color === PL
           && piece2.color === PL
@@ -466,7 +461,7 @@ function SinglePlayerHd(){
           && piece4.color === PL
           && piece5.color === PL  
           && piece.color !== PL))
-            score = score - 800
+            score = score - 8000
       }
 
     
@@ -485,7 +480,7 @@ function SinglePlayerHd(){
           && piece4.color === AI
           && piece5.color === AI  
           && piece.color !== AI))
-            score = score + 800
+            score = score + 8000
         if((piece && piece1 && piece2 && piece3 && piece4 && piece5) 
           && (piece1.color === PL
           && piece2.color === PL
@@ -493,7 +488,7 @@ function SinglePlayerHd(){
           && piece4.color === PL
           && piece5.color === PL  
           && piece.color !== PL))
-            score = score - 800
+            score = score - 8000
       }
     
     for(let c = 1; c < 6; c++)
@@ -561,12 +556,12 @@ function SinglePlayerHd(){
       || (checkForCopyVertWin(boardy)[0] && checkForCopyVertWin(boardy)[1] === PL)
       || (checkForCopyDiag1Win(boardy)[0] && checkForCopyDiag1Win(boardy)[1] === PL)
       || (checkForCopyDiag2Win(boardy)[0] && checkForCopyDiag2Win(boardy)[1] === PL))
-        return ([null, -10000000 - depth])
+        return ([null, -100000 - depth])
       else if((checkForCopyOrizWin(boardy)[0] && checkForCopyOrizWin(boardy)[1] === AI)
       || (checkForCopyVertWin(boardy)[0] && checkForCopyVertWin(boardy)[1] === AI)
       || (checkForCopyDiag1Win(boardy)[0] && checkForCopyDiag1Win(boardy)[1] === AI)
       || (checkForCopyDiag2Win(boardy)[0] && checkForCopyDiag2Win(boardy)[1] === AI))
-        return ([null, 10000000 +  depth])
+        return ([null, 100000 +  depth])
       else if(checkForCopyDraw(boardy))
         return ([null, 0])
       else
@@ -669,10 +664,10 @@ function SinglePlayerHd(){
   const checkForCopyDiag1Win = (boardy) => {
     for(let c = 0; c < 4; c++)
       for(let r = 0; r < 3; r++){
-        let piece1 = getPiece(c, r, boardy)
-        let piece2 = getPiece(c + 1, r + 1, boardy)
-        let piece3 = getPiece(c + 2, r + 2, boardy)
-        let piece4 = getPiece(c + 3, r + 3, boardy)
+        let piece1 = getCopyPiece(c, r, boardy)
+        let piece2 = getCopyPiece(c + 1, r + 1, boardy)
+        let piece3 = getCopyPiece(c + 2, r + 2, boardy)
+        let piece4 = getCopyPiece(c + 3, r + 3, boardy)
         if((piece1 && piece2 && piece3 && piece4) 
           &&(piece1.color === piece2.color 
           && piece2.color === piece3.color 

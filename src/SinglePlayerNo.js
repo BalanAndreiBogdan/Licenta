@@ -72,15 +72,10 @@ function SinglePlayerNo(){
   const addAIPiece = () => {
     let coloana = null
     let row = null
-    while(true){
-      let col = minimax(piecesOnBoard, 4, true)[0]
-      let getrow = getAIRow(col)
-      if(getPiece(col, getrow) == null && getrow < 7){
-        coloana = col
-        row = getrow
-        break
-      }
-    }
+    let col = minimax(piecesOnBoard, 4, true)[0]
+    let getrow = getAIRow(col)
+    coloana = col
+    row = getrow
     if(row !== null && winner == null){
       setpiecesOnBoard(piecesOnBoard.concat({col : coloana, row : row, color : pieceColor}))
       const nextPieceColor = pieceColor === '#D90000' ? '#FFF000' : '#D90000'
@@ -659,10 +654,10 @@ function SinglePlayerNo(){
   const checkForCopyDiag1Win = (boardy) => {
     for(let c = 0; c < 4; c++)
       for(let r = 0; r < 3; r++){
-        let piece1 = getPiece(c, r, boardy)
-        let piece2 = getPiece(c + 1, r + 1, boardy)
-        let piece3 = getPiece(c + 2, r + 2, boardy)
-        let piece4 = getPiece(c + 3, r + 3, boardy)
+        let piece1 = getCopyPiece(c, r, boardy)
+        let piece2 = getCopyPiece(c + 1, r + 1, boardy)
+        let piece3 = getCopyPiece(c + 2, r + 2, boardy)
+        let piece4 = getCopyPiece(c + 3, r + 3, boardy)
         if((piece1 && piece2 && piece3 && piece4) 
           &&(piece1.color === piece2.color 
           && piece2.color === piece3.color 
